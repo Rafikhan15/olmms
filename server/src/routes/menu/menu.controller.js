@@ -1,5 +1,12 @@
-const { menuCreate } = require("../../models/menu.model");
+const { menuCreate, allMenu } = require("../../models/menu.model");
 
+ async function getAllMenu (req, res) {
+  try {
+    return res.status(200).json(await allMenu());
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+  };
  async function addMenu (req, res) {
   const menu = req.body;
   if (!menu.menuname || !menu.description || !menu.menudate) {
@@ -9,4 +16,4 @@ const { menuCreate } = require("../../models/menu.model");
   }
   };
 
-  module.exports = {addMenu}
+  module.exports = {addMenu, getAllMenu}

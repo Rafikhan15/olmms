@@ -1,5 +1,20 @@
 const { client } = require("../utils/dbConnect");
 const { format } = require('date-fns');
+
+
+
+// GET ALL MENU MODEL
+async function allMenu(){
+  try {
+    const query = `select * from menus`;
+  const result = await client.query(query);
+  client.end;
+  return { status: "success", result: result.rows };
+  } catch (error) {
+    return { status: "error", error: error.message };
+  }
+}
+
 // POST MODEL
 async function menuCreate(menu) {
     const { menuname, description, menudate, createdby } = menu;
@@ -26,6 +41,7 @@ async function menuCreate(menu) {
   
   
   module.exports = {
-    menuCreate
+    menuCreate,
+    allMenu
   };
   
