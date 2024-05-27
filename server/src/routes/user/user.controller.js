@@ -1,9 +1,20 @@
-const { userCreate, allUser } = require("../../models/user.model");
+const { userCreate, allUser, userById } = require("../../models/user.model");
 
 // GET
 async function getAllUsers(req, res) {
   try {
     return res.status(200).json(await allUser());
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+ 
+}
+
+// GET ONE USER
+async function getUserById(req, res) {
+  const { id } = req.params;
+  try {
+    return res.status(200).json(await userById(id));
   } catch (error) {
     return res.status(400).json({ error: error.message });
   }
@@ -22,4 +33,4 @@ async function userRegister(req, res) {
 }
 
 
-module.exports = { userRegister, getAllUsers };
+module.exports = { userRegister, getAllUsers, getUserById };
