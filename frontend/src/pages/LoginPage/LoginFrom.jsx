@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -11,31 +11,36 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { redirect, useNavigate } from "react-router-dom";
 const LoginFrom = () => {
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('http://localhost:5000/user', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/user/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
 
       const result = await response.json();
 
-      if (result.exists) {
-        alert('Login successful!');
+      if (result.status === "success") {
+        setError("");
+        sessionStorage.setItem("user", JSON.stringify(result.result));
+        navigate("/home");
       } else {
-        alert('User does not exist.');
+        setError(result.error);
       }
     } catch (error) {
-      console.error('Error checking user:', error);
+      console.error("Error checking user:", error);
     }
   };
 
@@ -49,25 +54,32 @@ const LoginFrom = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
+          {error === "" ? (
+            ""
+          ) : (
+            <p className="bg-red-100 text-gray-700 text-center py-3 text-sm rounded-sm">
+              {error}
+            </p>
+          )}
           <div className="space-y-1">
             <Label htmlFor="email">Email</Label>
             <Input
-              {...register("mail", {
+              {...register("email", {
                 required: "Email Address is required",
                 pattern: {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 },
               })}
-              aria-invalid={errors.mail ? "true" : "false"}
+              aria-invalid={errors.email ? "true" : "false"}
               id="name"
               placeholder="enter your email"
             />
-            {errors.mail && (
+            {errors.email && (
               <p role="alert" className="text-red-500 text-sm">
-                {errors.mail.message}
+                {errors.email.message}
               </p>
             )}
-            {errors.mail && errors.mail.type === "pattern" && (
+            {errors.email && errors.email.type === "pattern" && (
               <p role="alert" className="text-red-500 text-sm">
                 Invalid email format
               </p>

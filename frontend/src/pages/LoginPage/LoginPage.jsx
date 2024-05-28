@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LoginFrom from "./LoginFrom";
 import SignupForm from "./SignupForm";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    if (user) {
+      return navigate("/home");
+    }
+  }, [navigate]);
   return (
     <div className="flex flex-col gap-y-10 h-screen py-3 justify-center items-center">
       <h1 className="text-3xl font-bold text-neutral-800 text-center">
