@@ -26,9 +26,9 @@ async function userLogin(req, res) {
   const user = req.body;
   const result = await getUser(user)
   if(result.status === "error") {
-    return res.status(400).json({ error: result.error });
+    return res.status(400).json(result);
   } else {
-    return res.status(200).json(result.result);
+    return res.status(200).json(result);
   }
 }
 
