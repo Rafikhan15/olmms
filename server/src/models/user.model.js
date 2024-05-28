@@ -28,6 +28,28 @@ async function userById(id){
 }
 
 
+// POST LOGIN MODEL
+async function getUser(user) {
+  const { email, password } = user;
+  const checkQuery = `select * from users where email = '${email}'`;
+  const checkResult = await client.query(checkQuery);
+
+
+  if (checkResult.rows.length > 0) {
+    if(await bcrypt.compare(password, checkResult.rows[0].password)){
+      const data = {
+        id: checkResult.rows[0].id,
+        username: checkResult.rows[0].username,
+        email: checkResult.rows[0].email
+      }
+      return {status: "success", result: data};
+    }
+    return {status: "error", error: "Invalid password"}
+  } else{
+    return {status: "error", error: "Please register first"}
+  }
+}
+
 // POST MODEL
 async function userCreate(user) {
   const { username, email, password } = user;
@@ -56,5 +78,6 @@ async function userCreate(user) {
 module.exports = {
   userCreate,
   allUser,
-  userById
+  userById,
+  getUser
 };
