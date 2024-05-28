@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 // GET MODEL
 async function allUser(){
   try {
-    const query = `select username, email, role from users`;
+    const query = `select id, username, email, role from users`;
   const result = await client.query(query);
   client.end;
   return { status: "success", result: result.rows };
