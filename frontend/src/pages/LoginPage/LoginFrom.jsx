@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const LoginFrom = () => {
   const {
     register,
@@ -88,7 +88,7 @@ const LoginFrom = () => {
           <div className="space-y-1">
             <Label htmlFor="password">Password</Label>
             <Input
-              id="username"
+              id="password"
               type="password"
               placeholder="enter your password"
               {...register("password", { required: "password is required" })}
