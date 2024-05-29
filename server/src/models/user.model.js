@@ -40,7 +40,8 @@ async function getUser(user) {
       const data = {
         id: checkResult.rows[0].id,
         username: checkResult.rows[0].username,
-        email: checkResult.rows[0].email
+        email: checkResult.rows[0].email,
+        role: checkResult.rows[0].role
       }
       return {status: "success", result: data};
     }
