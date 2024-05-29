@@ -6,9 +6,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const NavBar = () => {
+const NavBar = ({ setActive }) => {
   const navigate = useNavigate();
   const user = JSON.parse(sessionStorage.getItem("user"));
   const handleLogout = () => {
@@ -19,13 +19,35 @@ const NavBar = () => {
     <nav className="bg-blue-500 py-5 ">
       <div className="container flex justify-between">
         <ul className=" flex  font-semibold text-white">
-          <Button variant="link" className="text-white">
+          <Button
+            onClick={() =>
+              setActive({
+                menu: false,
+                user: true,
+                choice: false,
+              })
+            }
+            variant="link"
+            className="text-white"
+          >
             User
           </Button>
-          <Link variant="link" className="text-white">
+          <Button onClick={() =>
+              setActive({
+                menu: true,
+                user: false,
+                choice: false,
+              })
+            } variant="link" className="text-white">
             Lunch Menu
-          </Link>
-          <Button variant="link" className="text-white">
+          </Button>
+          <Button onClick={() =>
+              setActive({
+                menu: false,
+                user: false,
+                choice: true,
+              })
+            }  variant="link" className="text-white">
             Lunch Choice
           </Button>
         </ul>
