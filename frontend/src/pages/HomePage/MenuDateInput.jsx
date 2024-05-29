@@ -26,11 +26,15 @@ const MenuDateInput = ({ date, setDate }) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
+
         <Calendar
+          minDate={new Date()}
           mode="single"
           selected={date}
           onSelect={setDate}
+          disabled={{ before: new Date() }}
           initialFocus
+          required 
         />
       </PopoverContent>
     </Popover>
