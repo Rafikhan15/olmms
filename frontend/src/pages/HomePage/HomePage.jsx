@@ -1,20 +1,25 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import MenuTable from "./MenuTable";
+import NavBar from "./NavBar";
 
 const HomePage = () => {
-    const navigate = useNavigate();
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const user = JSON.parse(sessionStorage.getItem("user"));
+  const user = JSON.parse(sessionStorage.getItem("user"));
     if (!user) {
       return navigate("/");
     }
   }, [navigate]);
-    return (
-        <div>
-            <h1 className='text-3xl'>Home Page</h1>
-        </div>
-    );
+
+  
+  return (
+    <div>
+      <NavBar />
+      <MenuTable />
+    </div>
+  );
 };
 
 export default HomePage;
