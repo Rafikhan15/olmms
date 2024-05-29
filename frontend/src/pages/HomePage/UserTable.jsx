@@ -7,9 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useNavigate } from "react-router";
 const UserTable = () => {
+  const navigate = useNavigate();
 const [userData, setUserData] = useState([]);
-
+const user = JSON.parse(sessionStorage.getItem("user"));
+if (user.role !== "admin") {
+  return navigate("/");
+}
   useEffect(() => {
     try {
       fetch("http://localhost:5000/user")

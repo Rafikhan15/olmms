@@ -19,7 +19,7 @@ const NavBar = ({ setActive }) => {
     <nav className="bg-blue-500 py-5 ">
       <div className="container flex justify-between">
         <ul className=" flex  font-semibold text-white">
-          <Button
+         {user.role === "admin" &&  <Button
             onClick={() =>
               setActive({
                 menu: false,
@@ -31,7 +31,7 @@ const NavBar = ({ setActive }) => {
             className="text-white"
           >
             User
-          </Button>
+          </Button>}
           <Button onClick={() =>
               setActive({
                 menu: true,
