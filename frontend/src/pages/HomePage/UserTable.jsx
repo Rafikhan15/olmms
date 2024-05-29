@@ -33,17 +33,19 @@ const [userData, setUserData] = useState([]);
         <Table>
           <TableHeader>
             <TableRow >
-              <TableHead className="pl-5">Id</TableHead>
+              <TableHead className="pl-5 font-medium">ID</TableHead>
               <TableHead >Username</TableHead>
               <TableHead >Email</TableHead>
+              <TableHead >Role</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {userData.map((item) => (
               <TableRow  key={item.id}>
-                <TableCell className="pl-5 font-semibold">{item.id}</TableCell>
+                <TableCell className="pl-5 font-medium">{item.id}</TableCell>
                 <TableCell >{item.username}</TableCell>
-                <TableCell className="font-medium">{item.email}</TableCell>
+                <TableCell >{item.email}</TableCell>
+                {item.role === "admin" ? <TableCell className="font-medium text-green-600">{item.role}</TableCell> : <TableCell >{item.role}</TableCell>}
               </TableRow>
             ))}
           </TableBody>
