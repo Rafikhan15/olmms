@@ -1,4 +1,4 @@
-const { lunchChoiceCreate, allLunchChoice } = require("../../models/lunchChoice.model");
+const { lunchChoiceCreate, allLunchChoice, deleteLunchChoice } = require("../../models/lunchChoice.model");
 
 // GET
  async function getAllLunchChoice (req, res) {
@@ -19,4 +19,14 @@ const { lunchChoiceCreate, allLunchChoice } = require("../../models/lunchChoice.
   }
   };
 
-  module.exports = {addLunchChoice, getAllLunchChoice}
+  // DELETE
+ async function deleteLunch (req, res) {
+  const id = req.params.id;
+  try {
+    return res.status(200).json(await deleteLunchChoice(id));
+  } catch (error) {
+    return res.status(400).json({ error: error.message });
+  }
+  };
+
+  module.exports = {addLunchChoice, getAllLunchChoice, deleteLunch}
