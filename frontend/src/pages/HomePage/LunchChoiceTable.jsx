@@ -11,6 +11,7 @@ import { SquareCheckBig } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 const LunchChoiceTable = () => {
     const [lunchData, setLunchData] = useState([]);
+    console.log(lunchData);
     useEffect(() => {
         try {
           fetch("http://localhost:5000/lunchChoice")
@@ -40,6 +41,7 @@ const LunchChoiceTable = () => {
           <TableHeader>
             <TableRow className="text-center">
               <TableHead className="pl-5">No.</TableHead>
+              <TableHead>Date</TableHead>
               <TableHead>Menu Name</TableHead>
               <TableHead>User Name</TableHead>
               <TableHead>Choose</TableHead>
@@ -50,6 +52,7 @@ const LunchChoiceTable = () => {
               .map((item, index) => (
                 <TableRow key={item.id} >
                   <TableCell className="pl-5">{index+1}</TableCell>
+                  <TableCell >{item.menudate}</TableCell>
                   <TableCell className="font-medium">{item.menuname}</TableCell>
                   <TableCell>{item.username}</TableCell>
                   <TableCell onClick={() => {}} className="flex gap-x-10 text-green-500 pl-5">

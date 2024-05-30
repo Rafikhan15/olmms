@@ -34,7 +34,7 @@ async function lunchChoiceCreate(lunchChoice) {
     );
     const menuname = menuQuery.rows[0].menuname;
     const menudate = menuQuery.rows[0].menudate;
-
+      console.log(menudate);
     const newLunchChoice = { userid, username, menuid, menuname, menudate };
     const insertQuery = `
             INSERT INTO lunchchoice(userid,username, menuid, menuname, menudate)
