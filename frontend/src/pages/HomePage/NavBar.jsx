@@ -41,7 +41,7 @@ const NavBar = ({ setActive }) => {
             } variant="link" className="text-white">
             Lunch Menu
           </Button>
-          <Button onClick={() =>
+          {user.role === "admin" && <Button onClick={() =>
               setActive({
                 menu: false,
                 user: false,
@@ -49,7 +49,7 @@ const NavBar = ({ setActive }) => {
               })
             }  variant="link" className="text-white">
             Lunch Choice
-          </Button>
+          </Button>}
         </ul>
         <DropdownMenu>
           <DropdownMenuTrigger className="flex gap-2 items-center text-slate-100 font-semibold">

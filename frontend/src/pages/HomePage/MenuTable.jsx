@@ -12,6 +12,8 @@ import AddMenuButton from "./AddMenuButton";
 import { SquareCheckBig } from "lucide-react";
 import { isBefore } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { fetchMenuData } from "@/hooks/fetchMenuData";
+import { fetchLunchData } from "@/hooks/fetchLunchData";
 
 const MenuTable = () => {
   const [menuData, setMenuData] = useState([]);
@@ -22,6 +24,7 @@ const MenuTable = () => {
       userid,
       menuid,
     };
+    console.log(data);
     try {
       const response = await fetch(`http://localhost:5000/lunchChoice/add`, {
         method: "POST",
@@ -33,8 +36,8 @@ const MenuTable = () => {
       const result = await response.json();
       if (result.status === "created") {
         console.log("created");
-        await fetchMenuData();
-        await fetchLunchData();
+        await fetchMenuData(setMenuData);
+        await fetchLunchData(setLunchData);
       } else {
         console.log(result.error);
       }
@@ -43,37 +46,10 @@ const MenuTable = () => {
     }
   };
 
-  const fetchMenuData = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/menu");
-      const data = await response.json();
-      if (data.status === "success") {
-        setMenuData(data.result);
-      } else {
-        console.log(data.error);
-      }
-    } catch (error) {
-      console.error("Error fetching menu data:", error);
-    }
-  };
-
-  const fetchLunchData = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/lunchChoice");
-      const data = await response.json();
-      if (data.status === "success") {
-        setLunchData(data.result);
-      } else {
-        console.log(data.error);
-      }
-    } catch (error) {
-      console.error("Error fetching lunch data:", error);
-    }
-  };
 
   useEffect(() => {
-    fetchMenuData();
-    fetchLunchData();
+    fetchMenuData(setMenuData);
+    fetchLunchData(setLunchData);
   }, []);
 
   const hanldeRemove = async (id) => {
@@ -84,8 +60,8 @@ const MenuTable = () => {
       });
       const result = await response.json();
       if (result.status === "success") {
-        fetchMenuData();
-        fetchLunchData();
+        await fetchMenuData(setMenuData);
+        await fetchLunchData(setLunchData);
         console.log("success");
       } else {
         console.log(result.error);
@@ -209,12 +185,12 @@ const MenuTable = () => {
                 return isBefore(menuDate, new Date()) && !item.isactive;
               })
               .map((item, index) => (
-                <TableRow key={item.id}>
+                <TableRow key={item.id} className="cursor-not-allowed opacity-50 bg-gray-100 hover:bg-gray-100">
                   <TableCell className="pl-5">{index + 1}</TableCell>
                   <TableCell>{item.menudate}</TableCell>
                   <TableCell className="font-medium">{item.menuname}</TableCell>
                   <TableCell>{item.description}</TableCell>
-                  <TableCell className="text-red-600">Close</TableCell>
+                  <TableCell className="text-red-600 opacity-50">Close</TableCell>
                   {lunchData.find((lunch) => lunch.menuid === item.id && lunch.userid === user.id) ? (
                     <TableCell className="flex gap-x-10 text-green-500 pl-5">
                       <SquareCheckBig className="size-5 " />
