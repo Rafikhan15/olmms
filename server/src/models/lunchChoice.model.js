@@ -17,7 +17,7 @@ async function allLunchChoice() {
 async function lunchChoiceCreate(lunchChoice) {
   const { userid, menuid } = lunchChoice;
 
-  const checkQuery = `select * from lunchchoice where menuid = '${menuid}'`;
+  const checkQuery = `select * from lunchchoice where menuid = '${menuid} ' and userid = '${userid}'`;
   const checkResult = await client.query(checkQuery);
 
   if (checkResult.rows.length > 0) {
