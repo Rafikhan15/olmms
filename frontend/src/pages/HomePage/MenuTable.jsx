@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/table";
 
 import AddMenuButton from "./AddMenuButton";
+import { SquareCheckBig } from "lucide-react";
+import { isBefore } from "date-fns";
 
 const MenuTable = () => {
   const [menuData, setMenuData] = useState([]);
@@ -44,25 +46,27 @@ const MenuTable = () => {
         <Table>
           <TableHeader>
             <TableRow className="text-center">
-              <TableHead className="pl-5">Date</TableHead>
+              <TableHead className="pl-5">No.</TableHead>
+              <TableHead>Date</TableHead>
               <TableHead>Menu Name</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Choose</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {menuData
               .filter((item) => item.isactive)
-              .map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="pl-5">{item.menudate}</TableCell>
+              .map((item, index) => (
+                <TableRow key={item.id} className="cursor-pointer">
+                  <TableCell className="pl-5">{index+1}</TableCell>
+                  <TableCell>{item.menudate}</TableCell>
                   <TableCell className="font-medium">{item.menuname}</TableCell>
                   <TableCell>{item.description}</TableCell>
-                  {item.isactive === true ? (
-                    <TableCell className="text-green-500 ">Active</TableCell>
-                  ) : (
-                    <TableCell className="text-red-500">Inactive</TableCell>
-                  )}
+                  <TableCell className="text-green-500 ">Active</TableCell>
+                  <TableCell onClick={() => {}} className="text-gray-400 hover:text-green-500 pl-5 cursor-pointer">
+                    <SquareCheckBig className="size-5 " />
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>
@@ -71,13 +75,14 @@ const MenuTable = () => {
 
       {user.role == "admin" && (
         <div className="border rounded-md mt-10">
-          <p className="text-center text-xl font-medium py-3 text-slate-700 bg-pink-300">
-            PREVIOUS MENU
+          <p className="text-center text-xl font-medium py-3 text-slate-700 bg-indigo-300">
+            PENDING MENU
           </p>
           <Table>
             <TableHeader>
               <TableRow className="text-center">
-                <TableHead className="pl-5">Date</TableHead>
+                <TableHead className="pl-5">No.</TableHead>
+                <TableHead>Date</TableHead>
                 <TableHead>Menu Name</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Status</TableHead>
@@ -85,25 +90,59 @@ const MenuTable = () => {
             </TableHeader>
             <TableBody>
               {menuData
-                .filter((item) => !item.isactive)
-                .map((item) => (
+                .filter((item) => {
+                  const menuDate = new Date(item.menudate);
+                  return !isBefore(menuDate, new Date());
+                })
+                .map((item,index) => (
                   <TableRow key={item.id}>
-                    <TableCell className="pl-5">{item.menudate}</TableCell>
+                    <TableCell className="pl-5">{index+1}</TableCell>
+                    <TableCell>{item.menudate}</TableCell>
                     <TableCell className="font-medium">
                       {item.menuname}
                     </TableCell>
                     <TableCell>{item.description}</TableCell>
-                    {item.isactive === true ? (
-                      <TableCell className="text-green-500 ">Active</TableCell>
-                    ) : (
-                      <TableCell className="text-red-500">Inactive</TableCell>
-                    )}
+                    <TableCell className="text-yellow-600">Panding</TableCell>
                   </TableRow>
                 ))}
             </TableBody>
           </Table>
         </div>
       )}
+     <div className="border rounded-md my-10">
+          <p className="text-center text-xl font-medium py-3 bg-pink-200 text-slate-700 ">
+            PREVIOUS MENU
+          </p>
+          <Table>
+            <TableHeader>
+              <TableRow className="text-center">
+                <TableHead className="pl-5">No.</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Menu Name</TableHead>
+                <TableHead>Description</TableHead>
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {menuData
+                .filter((item) => {
+                  const menuDate = new Date(item.menudate);
+                  return isBefore(menuDate, new Date()) && !item.isactive;
+                })
+                .map((item,index) => (
+                  <TableRow key={item.id}>
+                    <TableCell className="pl-5">{index+1}</TableCell>
+                    <TableCell >{item.menudate}</TableCell>
+                    <TableCell className="font-medium">
+                      {item.menuname}
+                    </TableCell>
+                    <TableCell>{item.description}</TableCell>
+                    <TableCell className="text-red-600">Close</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </div>
     </div>
   );
 };
