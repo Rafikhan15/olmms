@@ -37,8 +37,8 @@ async function lunchChoiceCreate(lunchChoice) {
 
     const newLunchChoice = { userid, username, menuid, menuname, menudate };
     const insertQuery = `
-            INSERT INTO lunchchoice(userid,username, menuid, menuname)
-            values('${userid}','${username}', '${menuid}', '${menuname}')`;
+            INSERT INTO lunchchoice(userid,username, menuid, menuname, menudate)
+            values('${userid}','${username}', '${menuid}', '${menuname}', '${menudate}')`;
     const result = await client.query(insertQuery);
     return { status: "created", result: newLunchChoice };
   } catch (err) {
