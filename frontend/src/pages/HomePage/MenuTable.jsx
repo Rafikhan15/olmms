@@ -64,7 +64,7 @@ const MenuTable = () => {
                   <TableCell className="font-medium">{item.menuname}</TableCell>
                   <TableCell>{item.description}</TableCell>
                   <TableCell className="text-green-500 ">Active</TableCell>
-                  <TableCell className="text-gray-400 hover:text-green-500 pl-5 cursor-pointer">
+                  <TableCell onClick={() => {}} className="text-gray-400 hover:text-green-500 pl-5 cursor-pointer">
                     <SquareCheckBig className="size-5 " />
                   </TableCell>
                 </TableRow>
@@ -127,7 +127,7 @@ const MenuTable = () => {
               {menuData
                 .filter((item) => {
                   const menuDate = new Date(item.menudate);
-                  return isBefore(menuDate, new Date());
+                  return isBefore(menuDate, new Date()) && !item.isactive;
                 })
                 .map((item,index) => (
                   <TableRow key={item.id}>

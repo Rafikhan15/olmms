@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import LunchChoiceTable from "./LunchChoiceTable";
 import MenuTable from "./MenuTable";
 import NavBar from "./NavBar";
 import UserTable from "./UserTable";
@@ -15,6 +16,7 @@ const HomePage = () => {
       <NavBar setActive={setActive} />
       {active.menu && <MenuTable />}
       {active.user && <UserTable />}
+      {active.choice && <LunchChoiceTable />}
     </div>
   );
 };
