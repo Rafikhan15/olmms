@@ -85,11 +85,6 @@ const user = JSON.parse(sessionStorage.getItem("user"));
               <div className="space-y-1 w-[40%]">
                 <Label htmlFor="menudate">Menu Date</Label>
                 <MenuDateInput date={date} setDate={setDate}/>
-                  {dateString === "" && (
-                  <p role="alert" className="text-red-500 text-sm">
-                    menu date is required
-                  </p>
-                )}
               </div>
             </div>
             <div className="space-y-1">
