@@ -59,7 +59,33 @@ async function menuCreate(menu) {
   }
 }
 
+// UPDATE MODEL
+async function menuUpdate(menu, id) {
+  const { menuname, description, menudate, createdby } = menu;
+
+  let newMenu = { menuname, description, menudate, createdby };
+  const currentDate = format(new Date(), "d-MMM-yyyy");
+
+  if (menudate === currentDate) {
+    newMenu["isactive"] = true;
+  } else {
+    newMenu["isactive"] = false;
+  }
+  let updateQuery = `UPDATE menus 
+  SET menudate= '${newMenu.menudate}', menuname = '${newMenu.menuname}', description = '${newMenu.description}', createdby = '${newMenu.createdby}', isactive ='${newMenu.isactive}'
+  WHERE id = '${id}'`;
+
+  try {
+    const result = await client.query(updateQuery);
+    client.end;
+    return { status: "updated", result: newMenu };
+  } catch (err) {
+    return { status: "creation failed", error: err.message };
+  }
+}
+
 module.exports = {
   menuCreate,
   allMenu,
+  menuUpdate,
 };
