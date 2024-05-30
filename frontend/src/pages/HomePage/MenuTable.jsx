@@ -11,27 +11,89 @@ import {
 import AddMenuButton from "./AddMenuButton";
 import { SquareCheckBig } from "lucide-react";
 import { isBefore } from "date-fns";
+import { Badge } from "@/components/ui/badge";
 
 const MenuTable = () => {
   const [menuData, setMenuData] = useState([]);
-
+  const [lunchData, setLunchData] = useState([]);
   const user = JSON.parse(sessionStorage.getItem("user"));
+  const handleAddMenu = async (userid, menuid) => {
+    const data = {
+      userid,
+      menuid,
+    };
+    try {
+      const response = await fetch(`http://localhost:5000/lunchChoice/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      if (result.status === "created") {
+        console.log("created");
+        await fetchMenuData();
+        await fetchLunchData();
+      } else {
+        console.log(result.error);
+      }
+    } catch (error) {
+      console.error("Error checking:", error);
+    }
+  };
+
+  const fetchMenuData = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/menu");
+      const data = await response.json();
+      if (data.status === "success") {
+        setMenuData(data.result);
+      } else {
+        console.log(data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching menu data:", error);
+    }
+  };
+
+  const fetchLunchData = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/lunchChoice");
+      const data = await response.json();
+      if (data.status === "success") {
+        setLunchData(data.result);
+      } else {
+        console.log(data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching lunch data:", error);
+    }
+  };
 
   useEffect(() => {
+    fetchMenuData();
+    fetchLunchData();
+  }, []);
+
+  const hanldeRemove = async (id) => {
+    const data = lunchData.find((lunch) => lunch.menuid === id && lunch.userid === user.id)
     try {
-      fetch("http://localhost:5000/menu")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === "success") {
-            return setMenuData(data.result);
-          } else {
-            return console.log(data.error);
-          }
-        });
+      const response = await fetch(`http://localhost:5000/lunchChoice/${data.id}`, {
+        method: "DELETE",
+      });
+      const result = await response.json();
+      if (result.status === "success") {
+        fetchMenuData();
+        fetchLunchData();
+        console.log("success");
+      } else {
+        console.log(result.error);
+      }
     } catch (error) {
       console.error("Error checking user:", error);
     }
-  }, []);
+  };
 
   return (
     <div className="container">
@@ -59,14 +121,30 @@ const MenuTable = () => {
               .filter((item) => item.isactive)
               .map((item, index) => (
                 <TableRow key={item.id} className="cursor-pointer">
-                  <TableCell className="pl-5">{index+1}</TableCell>
+                  <TableCell className="pl-5">{index + 1}</TableCell>
                   <TableCell>{item.menudate}</TableCell>
                   <TableCell className="font-medium">{item.menuname}</TableCell>
                   <TableCell>{item.description}</TableCell>
                   <TableCell className="text-green-500 ">Active</TableCell>
-                  <TableCell onClick={() => {}} className="text-gray-400 hover:text-green-500 pl-5 cursor-pointer">
-                    <SquareCheckBig className="size-5 " />
-                  </TableCell>
+                  {lunchData.find((lunch) => lunch.menuid === item.id && lunch.userid === user.id) ? (
+                    <TableCell className="flex gap-x-10 text-green-500 pl-5">
+                      <SquareCheckBig className="size-5 " />
+                      <Badge
+                        variant="destructive"
+                        className="cursor-pointer hover:bg-red-700"
+                        onClick={() => hanldeRemove(item.id)}
+                      >
+                        remove
+                      </Badge>
+                    </TableCell>
+                  ) : (
+                    <TableCell className="text-gray-400 hover:text-green-500 pl-5 cursor-pointer">
+                      <SquareCheckBig
+                        onClick={() => handleAddMenu(user.id, item.id)}
+                        className="size-5 "
+                      />
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
           </TableBody>
@@ -94,9 +172,9 @@ const MenuTable = () => {
                   const menuDate = new Date(item.menudate);
                   return !isBefore(menuDate, new Date());
                 })
-                .map((item,index) => (
+                .map((item, index) => (
                   <TableRow key={item.id}>
-                    <TableCell className="pl-5">{index+1}</TableCell>
+                    <TableCell className="pl-5">{index + 1}</TableCell>
                     <TableCell>{item.menudate}</TableCell>
                     <TableCell className="font-medium">
                       {item.menuname}
@@ -109,40 +187,50 @@ const MenuTable = () => {
           </Table>
         </div>
       )}
-     <div className="border rounded-md my-10">
-          <p className="text-center text-xl font-medium py-3 bg-pink-200 text-slate-700 ">
-            PREVIOUS MENU
-          </p>
-          <Table>
-            <TableHeader>
-              <TableRow className="text-center">
-                <TableHead className="pl-5">No.</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Menu Name</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {menuData
-                .filter((item) => {
-                  const menuDate = new Date(item.menudate);
-                  return isBefore(menuDate, new Date()) && !item.isactive;
-                })
-                .map((item,index) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="pl-5">{index+1}</TableCell>
-                    <TableCell >{item.menudate}</TableCell>
-                    <TableCell className="font-medium">
-                      {item.menuname}
+      <div className="border rounded-md my-10">
+        <p className="text-center text-xl font-medium py-3 bg-pink-200 text-slate-700 ">
+          PREVIOUS MENU
+        </p>
+        <Table>
+          <TableHeader>
+            <TableRow className="text-center">
+              <TableHead className="pl-5">No.</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Menu Name</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Choose</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {menuData
+              .filter((item) => {
+                const menuDate = new Date(item.menudate);
+                return isBefore(menuDate, new Date()) && !item.isactive;
+              })
+              .map((item, index) => (
+                <TableRow key={item.id}>
+                  <TableCell className="pl-5">{index + 1}</TableCell>
+                  <TableCell>{item.menudate}</TableCell>
+                  <TableCell className="font-medium">{item.menuname}</TableCell>
+                  <TableCell>{item.description}</TableCell>
+                  <TableCell className="text-red-600">Close</TableCell>
+                  {lunchData.find((lunch) => lunch.menuid === item.id && lunch.userid === user.id) ? (
+                    <TableCell className="flex gap-x-10 text-green-500 pl-5">
+                      <SquareCheckBig className="size-5 " />
                     </TableCell>
-                    <TableCell>{item.description}</TableCell>
-                    <TableCell className="text-red-600">Close</TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </div>
+                  ) : (
+                    <TableCell className="text-gray-400 pl-5 cursor-pointer">
+                      <SquareCheckBig
+                        className="size-5 "
+                      />
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };

@@ -11,7 +11,6 @@ import { SquareCheckBig } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 const LunchChoiceTable = () => {
     const [lunchData, setLunchData] = useState([]);
-    console.log(lunchData);
     useEffect(() => {
         try {
           fetch("http://localhost:5000/lunchChoice")
@@ -28,6 +27,23 @@ const LunchChoiceTable = () => {
           console.error("Error checking user:", error);
         }
       }, []);
+
+     const hanldeRemove = async (id) => {
+        try {
+          const response = await fetch(`http://localhost:5000/lunchChoice/${id}`, {
+            method: "DELETE",
+          });
+          const result = await response.json();
+          if (result.status === "success") {
+            console.log("success");
+          } else {
+            console.log(result.error);
+          }
+        } catch (error) {
+          console.error("Error checking user:", error);
+        }
+      };
+
     return (
         <div className="container">
       <div className="flex pt-16 pb-6 justify-between">
@@ -55,8 +71,8 @@ const LunchChoiceTable = () => {
                   <TableCell >{item.menudate}</TableCell>
                   <TableCell className="font-medium">{item.menuname}</TableCell>
                   <TableCell>{item.username}</TableCell>
-                  <TableCell onClick={() => {}} className="flex gap-x-10 text-green-500 pl-5">
-                    <SquareCheckBig className="size-5 " /><Badge variant="destructive" className="cursor-pointer hover:bg-red-700">remove</Badge>
+                  <TableCell className="flex gap-x-10 text-green-500 pl-5">
+                    <SquareCheckBig className="size-5 " /><Badge onClick={() => hanldeRemove(item.id)} variant="destructive" className="cursor-pointer hover:bg-red-700">remove</Badge>
                   </TableCell>
                 </TableRow>
               ))}
