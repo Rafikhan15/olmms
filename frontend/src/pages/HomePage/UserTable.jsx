@@ -37,11 +37,11 @@ if (user.role !== "admin") {
         <div className="border rounded-md">
         <Table>
           <TableHeader>
-            <TableRow >
-              <TableHead className="pl-5 font-medium">ID</TableHead>
-              <TableHead >Username</TableHead>
-              <TableHead >Email</TableHead>
-              <TableHead >Role</TableHead>
+            <TableRow className="bg-blue-500 hover:bg-blue-500">
+              <TableHead className="pl-5 font-medium text-slate-100">ID</TableHead>
+              <TableHead className="text-slate-100">Username</TableHead>
+              <TableHead className="text-slate-100" >Email</TableHead>
+              <TableHead className="text-slate-100" >Role</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

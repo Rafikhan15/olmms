@@ -33,9 +33,11 @@ const UpdateButton = ({item}) => {
       menudate: dateString,
       createdby: user.id,
     };
+    console.log(menu);
+    console.log(item.id);
     try {
-      const response = await fetch("http://localhost:5000/menu/add", {
-        method: "POST",
+      const response = await fetch(`http://localhost:5000/menu/${item.id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -43,8 +45,8 @@ const UpdateButton = ({item}) => {
       });
 
       const result = await response.json();
-
-      if (result.status === "created") {
+        console.log(result);
+      if (result.status === "updated") {
         window.location.reload();
       } else {
         console.log(result.error);

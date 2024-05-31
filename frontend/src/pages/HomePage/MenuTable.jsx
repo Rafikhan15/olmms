@@ -114,7 +114,7 @@ const MenuTable = () => {
                       >
                         remove
                       </Badge>
-                      <UpdateButton item={item} />
+                      {user.role === "admin" ? <UpdateButton item={item} /> : ""}
                       </div>
                     </TableCell>
                   ) : (
@@ -123,7 +123,7 @@ const MenuTable = () => {
                         onClick={() => handleAddMenu(user.id, item.id)}
                         className="size-5 "
                       />
-                      <UpdateButton item={item} />
+                      {user.role === "admin" ? <UpdateButton item={item} /> : ""}
                     </TableCell>
                   )}
                 </TableRow>

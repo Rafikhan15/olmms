@@ -12,10 +12,13 @@ import { Badge } from "@/components/ui/badge";
 import { fetchLunchData } from "@/hooks/fetchLunchData";
 import { format, isBefore } from "date-fns";
 const LunchChoiceTable = () => {
+  const [choice, setChoice] = useState({});
   const [lunchData, setLunchData] = useState([]);
   useEffect(() => {
     fetchLunchData(setLunchData);
   }, []);
+
+  const user = JSON.parse(sessionStorage.getItem("user"));
 
   const hanldeRemove = async (id) => {
     try {
@@ -68,13 +71,15 @@ const LunchChoiceTable = () => {
                   <TableCell>{item.username}</TableCell>
                   <TableCell className="flex gap-x-10 text-green-500 pl-5">
                     <SquareCheckBig className="size-5 " />
-                    <Badge
+                    {item.userid === user.id && (
+                      <Badge
                       onClick={() => hanldeRemove(item.id)}
                       variant="destructive"
                       className="cursor-pointer hover:bg-red-700"
                     >
                       remove
                     </Badge>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
