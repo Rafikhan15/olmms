@@ -6,13 +6,14 @@ import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     if (user) {
       return navigate("/home");
     }
   }, [navigate]);
+
   return (
     <div className="flex flex-col gap-y-10 h-screen py-3 justify-center items-center">
       <h1 className="text-3xl font-bold text-neutral-800 text-center">
@@ -30,6 +31,10 @@ const LoginPage = () => {
           <TabsContent value="signup">
             <SignupForm />
           </TabsContent>
+          <div className="bg-slate-200 py-4 text-center text-neutral-700 font-medium rounded-md mt-3">
+            <p>Admin: admin@gmail.com</p>
+            <p>password: admin</p>
+          </div>
         </Tabs>
       </div>
     </div>

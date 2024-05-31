@@ -14,6 +14,7 @@ import { isBefore } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { fetchMenuData } from "@/hooks/fetchMenuData";
 import { fetchLunchData } from "@/hooks/fetchLunchData";
+import UpdateButton from "./UpdateButton";
 
 const MenuTable = () => {
   const [menuData, setMenuData] = useState([]);
@@ -103,8 +104,9 @@ const MenuTable = () => {
                   <TableCell>{item.description}</TableCell>
                   <TableCell className="text-green-500 ">Active</TableCell>
                   {lunchData.find((lunch) => lunch.menuid === item.id && lunch.userid === user.id) ? (
-                    <TableCell className="flex gap-x-10 text-green-500 pl-5">
+                    <TableCell className="flex justify-between text-green-500 px-5">
                       <SquareCheckBig className="size-5 " />
+                      <div className="flex gap-2">
                       <Badge
                         variant="destructive"
                         className="cursor-pointer hover:bg-red-700"
@@ -112,13 +114,16 @@ const MenuTable = () => {
                       >
                         remove
                       </Badge>
+                      {user.role === "admin" ? <UpdateButton item={item} /> : ""}
+                      </div>
                     </TableCell>
                   ) : (
-                    <TableCell className="text-gray-400 hover:text-green-500 pl-5 cursor-pointer">
+                    <TableCell className="text-gray-400 flex justify-between hover:text-green-500 px-5 cursor-pointer">
                       <SquareCheckBig
                         onClick={() => handleAddMenu(user.id, item.id)}
                         className="size-5 "
                       />
+                      {user.role === "admin" ? <UpdateButton item={item} /> : ""}
                     </TableCell>
                   )}
                 </TableRow>
