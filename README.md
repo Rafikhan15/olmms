@@ -123,8 +123,18 @@ This documentation provides an overview of the Office Lunch Menu Management Syst
 
 
 ## Demo
-
-Insert gif or link to demo
+- Video Drive Link
+[Video Demostration](https://drive.google.com/drive/folders/1WZrgBeczMdpKE70oTwUTokdTGCza-fBp?usp=sharing)
 
 
 ## Screenshots
+1. Login UI
+<img src="./frontend/src/assets/img/login_ui.png" height="600"  align="center" />
+2. Menu UI
+<img src="./frontend/src/assets/img/home.png" height="600"  align="center" />
+3. Add menu modal
+<img src="./frontend/src/assets/img/add-menu_modal.png" height="600"  align="center" />
+4. lunch choice UI
+<img src="./frontend/src/assets/img/lunch_choice_ui.png" height="600"  align="center" />
+5. User Table UI
+<img src="./frontend/src/assets/img/user_ui.png" height="600"  align="center" />
