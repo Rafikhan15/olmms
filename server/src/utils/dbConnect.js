@@ -2,10 +2,10 @@ const { Client } = require("pg");
 
 const client = new Client({
   host: "localhost",
-  user: "postgres",
+  user: "myuser",
   port: 5432,
-  password: "root",
-  database: "lunchDB",
+  password: "123456",
+  database: "lunch_menu_db",
 });
 
 async function dbConnect() {
